@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoStock Dashboard - Real-time Market Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <header class="topbar">
+      <h1>📈 CryptoStock Analytics</h1>
+      <input type="text" id="searchInput" placeholder="🔍 Search BTC, ETH, AAPL..." class="search-box">
+    </header>
+
+    <main class="grid-container">
+      <section class="card asset-list-card">
+        <h2>Top Market Assets</h2>
+        <div id="assetsTable" class="table-container"></div>
+      </section>
+
+      <section class="card chart-card">
+        <h2>Asset Price Trend</h2>
+        <canvas id="trendChart" width="400" height="200"></canvas>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const tracker = new MarketTracker();
+
+    function renderTable(query = '') {
+      const assets = tracker.searchAssets(query);
+      const container = document.getElementById('assetsTable');
+      
+      let html = `<table class="market-table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Price</th>
+            <th>24h Change</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+      assets.forEach(a => {
+        const isPos = a.change24h >= 0;
+        html += `
+          <tr>
+            <td><strong>${a.name}</strong> <span class="sym">${a.symbol}</span></td>
+            <td>$${a.price.toLocaleString()}</td>
+            <td class="${isPos ? 'pos' : 'neg'}">${isPos ? '+' : ''}${a.change24h}%</td>
+          </tr>`;
+      });
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    }
+
+    function renderChart() {
+      const canvas = document.getElementById('trendChart');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+
+      const points = [50, 120, 90, 160, 110, 180];
+      points.forEach((pt, i) => {
+        const x = (i / (points.length - 1)) * (canvas.width - 40) + 20;
+        const y = canvas.height - pt;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      renderTable(e.target.value);
+    });
+
+    renderTable();
+    renderChart();
+  </script>
+</body>
+</html>
