@@ -1,0 +1,12 @@
+{
+  "name": "crypto-stock-dashboard",
+  "version": "1.0.0",
+  "description": "Financial Market & Crypto Tracker featuring interactive charts and price alert toggles",
+  "main": "app.js",
+  "scripts": {
+    "test": "node --test tests/dashboard.test.js",
+    "start": "npx serve ."
+  },
+  "author": "Syahir Mahmud",
+  "license": "MIT"
+}
