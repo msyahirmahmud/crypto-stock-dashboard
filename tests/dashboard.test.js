@@ -10,6 +10,12 @@ describe('CryptoStock Dashboard Unit Tests', () => {
     assert.strictEqual(assets[0].symbol, 'BTC');
   });
 
+  test('convertPrice converts USD to MYR accurately', () => {
+    const tracker = new MarketTracker();
+    const myr = tracker.convertPrice(100, 'MYR');
+    assert.strictEqual(myr, 445);
+  });
+
   test('searchAssets filters by query string', () => {
     const tracker = new MarketTracker();
     const result = tracker.searchAssets('sol');

@@ -10,11 +10,27 @@ class MarketTracker {
       { id: "sol", name: "Solana", symbol: "SOL", price: 145.20, change24h: 8.75, history: [130, 135, 138, 140, 145.2] },
       { id: "aapl", name: "Apple Inc.", symbol: "AAPL", price: 224.30, change24h: 0.85, history: [221, 222, 223, 223.5, 224.3] }
     ];
+    this.exchangeRates = {
+      USD: 1.0,
+      EUR: 0.92,
+      GBP: 0.78,
+      MYR: 4.45
+    };
     this.alerts = [];
   }
 
-  getAssets() {
-    return this.assets;
+  getAssets(currency = "USD") {
+    const rate = this.exchangeRates[currency] || 1.0;
+    return this.assets.map(a => ({
+      ...a,
+      convertedPrice: parseFloat((a.price * rate).toFixed(2)),
+      currency
+    }));
+  }
+
+  convertPrice(priceUSD, currency = "USD") {
+    const rate = this.exchangeRates[currency] || 1.0;
+    return parseFloat((priceUSD * rate).toFixed(2));
   }
 
   searchAssets(query) {
