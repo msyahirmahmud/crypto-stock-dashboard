@@ -23,6 +23,14 @@ class MarketTracker {
     return this.assets.filter(a => a.name.toLowerCase().includes(q) || a.symbol.toLowerCase().includes(q));
   }
 
+  exportCSVReport() {
+    let csv = "Symbol,Name,Price,Change24h\n";
+    this.assets.forEach(a => {
+      csv += `${a.symbol},"${a.name}",${a.price},${a.change24h}%\n`;
+    });
+    return csv;
+  }
+
   setAlert(symbol, targetPrice, condition = 'above') {
     const alert = {
       id: `alert-${Date.now()}`,

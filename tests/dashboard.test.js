@@ -10,6 +10,13 @@ describe('CryptoStock Dashboard Unit Tests', () => {
     assert.strictEqual(assets[0].symbol, 'BTC');
   });
 
+  test('exportCSVReport generates valid CSV string', () => {
+    const tracker = new MarketTracker();
+    const csv = tracker.exportCSVReport();
+    assert.strictEqual(csv.includes('Symbol,Name,Price,Change24h'), true);
+    assert.strictEqual(csv.includes('BTC,"Bitcoin",64250,3.45%'), true);
+  });
+
   test('searchAssets filters by query string', () => {
     const tracker = new MarketTracker();
     const result = tracker.searchAssets('sol');
